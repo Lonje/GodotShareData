@@ -12,11 +12,11 @@ import java.io.File
 
 
 class GodotShareData(godot: Godot) : GodotPlugin(godot) {
-    private val logTag = "godot::ShareData"
+    private val logTag = "godot::GodotShareData"
     private val mimeTypeText = "text/plain"
     private val mimeTypeImage = "image/*"
 
-    override fun getPluginName() = "ShareData"
+    override fun getPluginName() = "GodotShareData"
 
     @UsedByGodot
     fun share_text(title: String, subject: String, text: String) {
