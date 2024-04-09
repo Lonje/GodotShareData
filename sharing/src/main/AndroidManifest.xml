@@ -5,10 +5,10 @@
             android:name="org.godotengine.plugin.v2.GodotShareData"
             android:value="com.lonje.sharing.GodotShareData" />
         <provider
-            android:name="androidx.core.content.FileProvider"
+            android:name="com.lonje.sharing.ShareFileProvider"
             android:grantUriPermissions="true"
             android:exported="false"
-            android:authorities="com.lonje.sharing">
+            android:authorities="com.lonje.jumpjump.sharefileprovider">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_provider_paths"/>

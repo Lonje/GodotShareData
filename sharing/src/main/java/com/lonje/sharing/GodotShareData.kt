@@ -15,6 +15,7 @@ class GodotShareData(godot: Godot) : GodotPlugin(godot) {
     private val logTag = "godot::GodotShareData"
     private val mimeTypeText = "text/plain"
     private val mimeTypeImage = "image/*"
+    private val fileProvider = ".sharefileprovider"
 
     override fun getPluginName() = "GodotShareData"
 
@@ -33,7 +34,7 @@ class GodotShareData(godot: Godot) : GodotPlugin(godot) {
         Log.d(logTag, "shareImage() called with path $path")
         val f = File(path)
         val uri: Uri = try {
-            FileProvider.getUriForFile(activity!!, activity!!.packageName, f)
+            FileProvider.getUriForFile(activity!!, activity!!.packageName+fileProvider, f)
         } catch (e: IllegalArgumentException) {
             Log.e(logTag, "The selected file can't be shared: $path", e)
             return
