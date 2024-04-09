@@ -3,9 +3,9 @@ Import('env')
 
 sources = [
            'register_types.cpp',
-           'src/godotShare.mm'
+           'src/godotShareData.mm'
            ]
 
-if (env["platform"] == "iphone"):
+if (env["platform"] == "ios"):
     env.add_source_files(env.modules_sources, sources)
 

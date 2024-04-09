@@ -1,4 +1,4 @@
-#include "godotShare.h"
+#include "godotShareData.h"
 
 
 #import "app_delegate.h"
@@ -39,7 +39,7 @@ void GodotShareData::shareText(const String &title, const String &subject, const
     }
 }
 
-void GodotShareData::sharePic(const String &path, const String &title, const String &subject, const String &text) {
+void GodotShareData::shareImage(const String &path, const String &title, const String &subject, const String &text) {
     UIViewController *root_controller = [[UIApplication sharedApplication] delegate].window.rootViewController;
     
     NSString * message = [NSString stringWithCString:text.utf8().get_data() encoding:NSUTF8StringEncoding];
@@ -69,5 +69,5 @@ void GodotShareData::sharePic(const String &path, const String &title, const Str
 
 void GodotShareData::_bind_methods() {
     ClassDB::bind_method(D_METHOD("shareText"), &GodotShareData::shareText);
-    ClassDB::bind_method(D_METHOD("sharePic"), &GodotShareData::sharePic);
+    ClassDB::bind_method(D_METHOD("shareImage"), &GodotShareData::shareImage);
 }

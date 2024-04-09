@@ -1,6 +1,6 @@
 def can_build(env, platform):
-	return platform=="iphone"
-#	return platform=="android" or platform=="iphone"
+	return platform=="ios"
+#	return platform=="android" or platform=="ios"
 
 def configure(env):
 #	if (env['platform'] == 'android'):
@@ -11,6 +11,6 @@ def configure(env):
 #		env.android_add_res_dir("android/res")
 #		env.disable_module()
 
-	if env['platform'] == "iphone":
+	if env['platform'] == "ios":
 		env.Append(LINKFLAGS=['-ObjC'])
 		env.Append(CPPPATH=['#core'])

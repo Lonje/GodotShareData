@@ -2,10 +2,10 @@
 #define GODOT_SHARE_DATA_H
 
 #include <version_generated.gen.h>
-#include "reference.h"
+#include "core/object/ref_counted.h"
 
-class GodotShareData : public Reference {
-    GDCLASS(GodotShareData, Reference);
+class GodotShareData : public RefCounted {
+    GDCLASS(GodotShareData, RefCounted);
     
 
 protected:
@@ -16,7 +16,7 @@ protected:
 public:
 
     void shareText(const String &title, const String &subject, const String &text);
-    void sharePic(const String &path, const String &title, const String &subject, const String &text);
+    void shareImage(const String &path, const String &title, const String &subject, const String &text);
 
     GodotShareData();
     ~GodotShareData();
