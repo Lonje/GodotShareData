@@ -6,6 +6,6 @@ sources = [
            'src/godotShareData.mm'
            ]
 
-if (env["platform"] == "ios"):
+if env["platform"] in ["ios"]:
     env.add_source_files(env.modules_sources, sources)
 
