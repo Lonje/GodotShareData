@@ -19,11 +19,13 @@ void GodotShareData::shareText(const String &title, const String &subject, const
     
     UIViewController *root_controller = [[UIApplication sharedApplication] delegate].window.rootViewController;
     
-    NSString * message = [NSString stringWithCString:text.utf8().get_data() encoding:NSUTF8StringEncoding];
+    NSString * ns_text = [NSString stringWithCString:text.utf8().get_data() encoding:NSUTF8StringEncoding];
+    NSString * ns_subject = [NSString stringWithCString:subject.utf8().get_data() encoding:NSUTF8StringEncoding];
     
-    NSArray * shareItems = @[message];
+    NSArray * shareItems = @[ns_text];
     
     UIActivityViewController * avc = [[UIActivityViewController alloc] initWithActivityItems:shareItems applicationActivities:nil];
+    [avc setValue:ns_subject forKey:@"subject"];
     //if iPhone
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         [root_controller presentViewController:avc animated:YES completion:nil];
@@ -42,14 +44,16 @@ void GodotShareData::shareText(const String &title, const String &subject, const
 void GodotShareData::shareImage(const String &path, const String &title, const String &subject, const String &text) {
     UIViewController *root_controller = [[UIApplication sharedApplication] delegate].window.rootViewController;
     
-    NSString * message = [NSString stringWithCString:text.utf8().get_data() encoding:NSUTF8StringEncoding];
+    NSString * ns_text = [NSString stringWithCString:text.utf8().get_data() encoding:NSUTF8StringEncoding];
+    NSString * ns_subject = [NSString stringWithCString:subject.utf8().get_data() encoding:NSUTF8StringEncoding];
     NSString * imagePath = [NSString stringWithCString:path.utf8().get_data() encoding:NSUTF8StringEncoding];
     
     UIImage *image = [UIImage imageWithContentsOfFile:imagePath];
     
-    NSArray * shareItems = @[message, image];
+    NSArray * shareItems = @[ns_text, image];
     
     UIActivityViewController * avc = [[UIActivityViewController alloc] initWithActivityItems:shareItems applicationActivities:nil];
+    [avc setValue:ns_subject forKey:@"subject"];
      //if iPhone
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         [root_controller presentViewController:avc animated:YES completion:nil];
