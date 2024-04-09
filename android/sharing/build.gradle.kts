@@ -33,6 +33,7 @@ android {
 }
 
 dependencies {
+//    implementation("org.godotengine:godot:4.2.0.stable")
     implementation(libs.godot)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
