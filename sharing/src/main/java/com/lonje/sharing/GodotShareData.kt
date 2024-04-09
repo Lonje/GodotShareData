@@ -19,7 +19,7 @@ class GodotShareData(godot: Godot) : GodotPlugin(godot) {
     override fun getPluginName() = "GodotShareData"
 
     @UsedByGodot
-    fun share_text(title: String, subject: String, text: String) {
+    fun shareText(title: String, subject: String, text: String) {
         Log.d(logTag, "shareText() called")
         val shareIntent = Intent(Intent.ACTION_SEND)
         shareIntent.setType(mimeTypeText)
@@ -29,7 +29,7 @@ class GodotShareData(godot: Godot) : GodotPlugin(godot) {
     }
 
     @UsedByGodot
-    fun share_image(path: String, title: String, subject: String, text: String?) {
+    fun shareImage(path: String, title: String, subject: String, text: String) {
         Log.d(logTag, "shareImage() called with path $path")
         val f = File(path)
         val uri: Uri = try {
