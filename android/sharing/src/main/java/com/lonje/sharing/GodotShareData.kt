@@ -20,31 +20,29 @@ class GodotShareData(godot: Godot) : GodotPlugin(godot) {
     override fun getPluginName() = "GodotShareData"
 
     @UsedByGodot
-    fun shareText(title: String, subject: String, text: String) {
-        Log.d(logTag, "shareText() called")
-        val shareIntent = Intent(Intent.ACTION_SEND)
-        shareIntent.setType(mimeTypeText)
-        shareIntent.putExtra(Intent.EXTRA_SUBJECT, subject)
-        shareIntent.putExtra(Intent.EXTRA_TEXT, text)
-        activity?.startActivity(Intent.createChooser(shareIntent, title))
-    }
-
-    @UsedByGodot
-    fun shareImage(path: String, title: String, subject: String, text: String) {
-        Log.d(logTag, "shareImage() called with path $path")
-        val f = File(path)
-        val uri: Uri = try {
-            FileProvider.getUriForFile(activity!!, activity!!.packageName+fileProvider, f)
-        } catch (e: IllegalArgumentException) {
-            Log.e(logTag, "The selected file can't be shared: $path", e)
-            return
-        }
+    fun share(text: String, subject: String, title: String, path: String) {
+        //Log.d(logTag, "share() called with path $path")
         val shareIntent = Intent(Intent.ACTION_SEND)
         shareIntent.setType(mimeTypeImage)
-        shareIntent.putExtra(Intent.EXTRA_SUBJECT, subject)
-        shareIntent.putExtra(Intent.EXTRA_TEXT, text)
-        shareIntent.clipData = ClipData.newRawUri("", uri)
-        shareIntent.putExtra(Intent.EXTRA_STREAM, uri)
         shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        activity?.startActivity(Intent.createChooser(shareIntent, title))
+        if (text.isNotEmpty()) {
+            shareIntent.putExtra(Intent.EXTRA_TEXT, text)
+        }
+        if (subject.isNotEmpty()) {
+            shareIntent.putExtra(Intent.EXTRA_SUBJECT, subject)
+        }
+        if (title.isNotEmpty()) {
+            activity?.startActivity(Intent.createChooser(shareIntent, title))
+        }
+        if (path.isNotEmpty()) {
+            val f = File(path)
+            val uri: Uri = try {
+                FileProvider.getUriForFile(activity!!, activity!!.packageName+fileProvider, f)
+            } catch (e: IllegalArgumentException) {
+                Log.e(logTag, "The selected file can't be shared: $path", e)
+                return
+            }
+            shareIntent.clipData = ClipData.newRawUri("", uri)
+            shareIntent.putExtra(Intent.EXTRA_STREAM, uri)
+        }
     }}
