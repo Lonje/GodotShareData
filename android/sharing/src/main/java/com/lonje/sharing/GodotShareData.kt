@@ -31,9 +31,6 @@ class GodotShareData(godot: Godot) : GodotPlugin(godot) {
         if (subject.isNotEmpty()) {
             shareIntent.putExtra(Intent.EXTRA_SUBJECT, subject)
         }
-        if (title.isNotEmpty()) {
-            activity?.startActivity(Intent.createChooser(shareIntent, title))
-        }
         if (path.isNotEmpty()) {
             val f = File(path)
             val uri: Uri = try {
@@ -45,4 +42,5 @@ class GodotShareData(godot: Godot) : GodotPlugin(godot) {
             shareIntent.clipData = ClipData.newRawUri("", uri)
             shareIntent.putExtra(Intent.EXTRA_STREAM, uri)
         }
+        activity?.startActivity(Intent.createChooser(shareIntent, title))
     }}
