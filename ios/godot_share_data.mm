@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*  register_types.h                                                      */
+/*  godot_share_data.mm                                                   */
 /**************************************************************************/
 /*                         This file is part of:                          */
 /*                             GODOT ENGINE                               */
@@ -28,12 +28,48 @@
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                 */
 /**************************************************************************/
 
-#ifndef SHARE_REGISTER_TYPES_H
-#define SHARE_REGISTER_TYPES_H
+#include "godot_share_data.h"
 
-#include "modules/register_module_types.h"
+#import "app_delegate.h"
 
-void initialize_share_module(ModuleInitializationLevel p_level);
-void uninitialize_share_module(ModuleInitializationLevel p_level);
+GodotShareData *GodotShareData::singleton = nullptr;
 
-#endif // SHARE_REGISTER_TYPES_H
+GodotShareData::GodotShareData() {
+	ERR_FAIL_COND(singleton != nullptr);
+	singleton = this;
+}
+
+GodotShareData::~GodotShareData() {
+	singleton = nullptr;
+}
+
+void GodotShareData::share(const String &p_text, const String &p_subject, const String &p_title, const String &p_path) {
+	UIViewController *root_controller = [[UIApplication sharedApplication] delegate].window.rootViewController;
+
+	NSString *ns_text = [NSString stringWithCString:p_text.utf8().get_data() encoding:NSUTF8StringEncoding];
+	NSMutableArray *share_items = [@[ ns_text ] mutableCopy];
+	if (p_path.is_empty() == false) {
+		NSString *image_path = [NSString stringWithCString:p_path.utf8().get_data() encoding:NSUTF8StringEncoding];
+		UIImage *ui_image = [UIImage imageWithContentsOfFile:image_path];
+		[share_items addObject:ui_image];
+	}
+
+	UIActivityViewController *avc = [[UIActivityViewController alloc] initWithActivityItems:share_items applicationActivities:nil];
+	if (p_subject.is_empty() == false) {
+		NSString *ns_subject = [NSString stringWithCString:p_subject.utf8().get_data() encoding:NSUTF8StringEncoding];
+		[avc setValue:ns_subject forKey:@"subject"];
+	}
+	//if iPad
+	if (UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPhone) {
+		// Change Rect to position Popover
+		avc.modalPresentationStyle = UIModalPresentationPopover;
+		avc.popoverPresentationController.sourceView = root_controller.view;
+		avc.popoverPresentationController.sourceRect = CGRectMake(CGRectGetMidX(root_controller.view.bounds), CGRectGetMidY(root_controller.view.bounds), 0, 0);
+		avc.popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirection(0);
+	}
+	[root_controller presentViewController:avc animated:YES completion:nil];
+}
+
+void GodotShareData::_bind_methods() {
+	ClassDB::bind_method(D_METHOD("share", "text", "subject", "title", "path"), &GodotShareData::share);
+}

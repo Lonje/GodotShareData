@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*  register_types.h                                                      */
+/*  godot_share_data.h                                                    */
 /**************************************************************************/
 /*                         This file is part of:                          */
 /*                             GODOT ENGINE                               */
@@ -28,12 +28,24 @@
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                 */
 /**************************************************************************/
 
-#ifndef SHARE_REGISTER_TYPES_H
-#define SHARE_REGISTER_TYPES_H
+#ifndef GODOT_SHARE_DATA_H
+#define GODOT_SHARE_DATA_H
 
-#include "modules/register_module_types.h"
+#include "core/object/ref_counted.h"
 
-void initialize_share_module(ModuleInitializationLevel p_level);
-void uninitialize_share_module(ModuleInitializationLevel p_level);
+class GodotShareData : public RefCounted {
+	GDCLASS(GodotShareData, RefCounted);
 
-#endif // SHARE_REGISTER_TYPES_H
+protected:
+	static void _bind_methods();
+
+	static GodotShareData *singleton;
+
+public:
+	void share(const String &p_text, const String &p_subject, const String &p_title, const String &p_path);
+
+	GodotShareData();
+	~GodotShareData();
+};
+
+#endif // GODOT_SHARE_DATA_H
