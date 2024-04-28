@@ -5,6 +5,8 @@ import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import androidx.core.content.FileProvider
+import com.google.android.play.core.ktx.launchReview
+import com.google.android.play.core.review.ReviewManagerFactory
 import org.godotengine.godot.Godot
 import org.godotengine.godot.plugin.GodotPlugin
 import org.godotengine.godot.plugin.UsedByGodot
@@ -43,4 +45,19 @@ class GodotShareData(godot: Godot) : GodotPlugin(godot) {
             shareIntent.putExtra(Intent.EXTRA_STREAM, uri)
         }
         activity?.startActivity(Intent.createChooser(shareIntent, title))
-    }}
+    }
+
+    @UsedByGodot
+    fun rate() {
+        val appCtx = activity?.applicationContext
+        if (appCtx != null) {
+            val reviewManager = ReviewManagerFactory.create(appCtx)
+            reviewManager.requestReviewFlow().addOnCompleteListener {
+                val localActivity = activity
+                if (it.isSuccessful && localActivity != null) {
+                    reviewManager.launchReviewFlow(localActivity, it.result)
+                }
+            }
+        }
+    }
+}
