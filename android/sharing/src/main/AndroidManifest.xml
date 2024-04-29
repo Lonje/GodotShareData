@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application>
         <meta-data
-            android:name="org.godotengine.plugin.v2.GodotShareData"
-            android:value="com.lonje.sharing.GodotShareData" />
+            android:name="org.godotengine.plugin.v2.GodotShare"
+            android:value="com.lonje.sharing.GodotShare" />
         <provider
             android:name="com.lonje.sharing.ShareFileProvider"
             android:grantUriPermissions="true"

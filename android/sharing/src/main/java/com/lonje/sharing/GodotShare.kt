@@ -13,13 +13,13 @@ import org.godotengine.godot.plugin.UsedByGodot
 import java.io.File
 
 
-class GodotShareData(godot: Godot) : GodotPlugin(godot) {
-    private val logTag = "godot::GodotShareData"
+class GodotShare(godot: Godot) : GodotPlugin(godot) {
+    private val logTag = "godot::GodotShare"
     private val mimeTypeText = "text/plain"
     private val mimeTypeImage = "image/*"
     private val fileProvider = ".sharefileprovider"
 
-    override fun getPluginName() = "GodotShareData"
+    override fun getPluginName() = "GodotShare"
 
     @UsedByGodot
     fun share(text: String, subject: String, title: String, path: String) {
