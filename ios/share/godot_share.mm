@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*  godot_share_data.mm                                                   */
+/*  godot_share.mm                                                        */
 /**************************************************************************/
 /*                         This file is part of:                          */
 /*                             GODOT ENGINE                               */
@@ -28,24 +28,24 @@
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                 */
 /**************************************************************************/
 
-#include "godot_share_data.h"
+#include "godot_share.h"
 
 #import "app_delegate.h"
 
 #import <StoreKit/StoreKit.h>
 
-GodotShareData *GodotShareData::singleton = nullptr;
+GodotShare *GodotShare::singleton = nullptr;
 
-GodotShareData::GodotShareData() {
+GodotShare::GodotShare() {
 	ERR_FAIL_COND(singleton != nullptr);
 	singleton = this;
 }
 
-GodotShareData::~GodotShareData() {
+GodotShare::~GodotShare() {
 	singleton = nullptr;
 }
 
-void GodotShareData::share(const String &p_text, const String &p_subject, const String &p_title, const String &p_path) {
+void GodotShare::share(const String &p_text, const String &p_subject, const String &p_title, const String &p_path) {
 	UIViewController *root_controller = [[UIApplication sharedApplication] delegate].window.rootViewController;
 
 	NSString *ns_text = [NSString stringWithCString:p_text.utf8().get_data() encoding:NSUTF8StringEncoding];
@@ -72,13 +72,13 @@ void GodotShareData::share(const String &p_text, const String &p_subject, const 
 	[root_controller presentViewController:avc animated:YES completion:nil];
 }
 
-void GodotShareData::rate() {
-    if (@available(iOS 10.3, *)) {
-        [SKStoreReviewController requestReview];
-    }
+void GodotShare::rate() {
+	if (@available(iOS 10.3, *)) {
+		[SKStoreReviewController requestReview];
+	}
 }
 
-void GodotShareData::_bind_methods() {
-	ClassDB::bind_method(D_METHOD("share", "text", "subject", "title", "path"), &GodotShareData::share);
-	ClassDB::bind_method(D_METHOD("rate"), &GodotShareData::rate);
+void GodotShare::_bind_methods() {
+	ClassDB::bind_method(D_METHOD("share", "text", "subject", "title", "path"), &GodotShare::share);
+	ClassDB::bind_method(D_METHOD("rate"), &GodotShare::rate);
 }
