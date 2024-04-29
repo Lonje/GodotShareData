@@ -32,6 +32,8 @@
 
 #import "app_delegate.h"
 
+#import <StoreKit/StoreKit.h>
+
 GodotShareData *GodotShareData::singleton = nullptr;
 
 GodotShareData::GodotShareData() {
@@ -71,6 +73,9 @@ void GodotShareData::share(const String &p_text, const String &p_subject, const 
 }
 
 void GodotShareData::rate() {
+    if (@available(iOS 10.3, *)) {
+        [SKStoreReviewController requestReview];
+    }
 }
 
 void GodotShareData::_bind_methods() {
