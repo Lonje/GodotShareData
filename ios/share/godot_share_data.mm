@@ -70,6 +70,10 @@ void GodotShareData::share(const String &p_text, const String &p_subject, const 
 	[root_controller presentViewController:avc animated:YES completion:nil];
 }
 
+void GodotShareData::rate() {
+}
+
 void GodotShareData::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("share", "text", "subject", "title", "path"), &GodotShareData::share);
+	ClassDB::bind_method(D_METHOD("rate"), &GodotShareData::rate);
 }
