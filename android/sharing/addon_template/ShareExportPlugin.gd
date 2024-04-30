@@ -45,7 +45,8 @@ class AndroidExportPlugin extends EditorExportPlugin:
 
 	func _get_android_dependencies(platform: EditorExportPlatform, debug: bool) -> PackedStringArray:
 		return PackedStringArray([
-			"androidx.appcompat:appcompat:1.6.1"
+			"com.google.android.play:review-ktx:2.0.1",
+			"com.google.android.play:review:2.0.1"
 		])
 
 
