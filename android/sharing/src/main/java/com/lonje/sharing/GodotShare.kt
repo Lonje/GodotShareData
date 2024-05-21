@@ -5,7 +5,9 @@ import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import androidx.core.content.FileProvider
-import com.google.android.play.core.ktx.launchReview
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.android.play.core.review.ReviewManagerFactory
 import org.godotengine.godot.Godot
 import org.godotengine.godot.plugin.GodotPlugin
@@ -49,14 +51,35 @@ class GodotShare(godot: Godot) : GodotPlugin(godot) {
 
     @UsedByGodot
     fun rate() {
-        val appCtx = activity?.applicationContext
-        if (appCtx != null) {
-            val reviewManager = ReviewManagerFactory.create(appCtx)
-            reviewManager.requestReviewFlow().addOnCompleteListener {
-                val localActivity = activity
-                if (it.isSuccessful && localActivity != null) {
-                    reviewManager.launchReviewFlow(localActivity, it.result)
-                }
+        Log.d(logTag, "rate()")
+        val appCtx = activity?.applicationContext ?: return
+        val reviewManager = ReviewManagerFactory.create(appCtx)
+        Log.d(logTag, "rate() 1 $appCtx")
+        reviewManager.requestReviewFlow().addOnCompleteListener {
+            val localActivity = activity
+            Log.d(logTag, "rate() 2 ${it.isSuccessful}:$localActivity")
+            if (it.isSuccessful && localActivity != null) {
+                Log.d(logTag, "rate() 3")
+                reviewManager.launchReviewFlow(localActivity, it.result)
+            }
+        }
+    }
+
+    @UsedByGodot
+    fun update() {
+        val appCtx = activity?.applicationContext ?: return
+        val appUpdateManager = AppUpdateManagerFactory.create(appCtx)
+        // Returns an intent object that you use to check for an update.
+        val appUpdateInfoTask = appUpdateManager.appUpdateInfo
+
+        // Checks that the platform will allow the specified type of update.
+        appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+                // This example applies an immediate update. To apply a flexible update
+                // instead, pass in AppUpdateType.FLEXIBLE
+                && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
+            ) {
+                // Request the update.
             }
         }
     }

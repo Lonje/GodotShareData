@@ -40,6 +40,8 @@ dependencies {
     implementation(libs.material)
     implementation(libs.review.ktx)
     implementation(libs.review)
+    implementation(libs.app.update)
+    implementation(libs.app.update.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
