@@ -51,15 +51,12 @@ class GodotShare(godot: Godot) : GodotPlugin(godot) {
 
     @UsedByGodot
     fun rate() {
-        Log.d(logTag, "rate()")
+//        Log.d(logTag, "rate()")
         val appCtx = activity?.applicationContext ?: return
         val reviewManager = ReviewManagerFactory.create(appCtx)
-        Log.d(logTag, "rate() 1 $appCtx")
         reviewManager.requestReviewFlow().addOnCompleteListener {
             val localActivity = activity
-            Log.d(logTag, "rate() 2 ${it.isSuccessful}:$localActivity")
             if (it.isSuccessful && localActivity != null) {
-                Log.d(logTag, "rate() 3")
                 reviewManager.launchReviewFlow(localActivity, it.result)
             }
         }
@@ -67,6 +64,7 @@ class GodotShare(godot: Godot) : GodotPlugin(godot) {
 
     @UsedByGodot
     fun update() {
+//        Log.d(logTag, "update()")
         val appCtx = activity?.applicationContext ?: return
         val appUpdateManager = AppUpdateManagerFactory.create(appCtx)
         // Returns an intent object that you use to check for an update.
