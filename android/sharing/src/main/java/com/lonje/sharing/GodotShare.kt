@@ -3,14 +3,17 @@ package com.lonje.sharing
 import android.content.ClipData
 import android.content.Intent
 import android.net.Uri
+import android.util.ArraySet
 import android.util.Log
 import androidx.core.content.FileProvider
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
+import com.google.android.play.core.review.ReviewException
 import com.google.android.play.core.review.ReviewManagerFactory
 import org.godotengine.godot.Godot
 import org.godotengine.godot.plugin.GodotPlugin
+import org.godotengine.godot.plugin.SignalInfo
 import org.godotengine.godot.plugin.UsedByGodot
 import java.io.File
 
@@ -54,10 +57,21 @@ class GodotShare(godot: Godot) : GodotPlugin(godot) {
 //        Log.d(logTag, "rate()")
         val appCtx = activity?.applicationContext ?: return
         val reviewManager = ReviewManagerFactory.create(appCtx)
-        reviewManager.requestReviewFlow().addOnCompleteListener {
+        reviewManager.requestReviewFlow().addOnCompleteListener { task ->
             val localActivity = activity
-            if (it.isSuccessful && localActivity != null) {
-                reviewManager.launchReviewFlow(localActivity, it.result)
+            if (task.isSuccessful && localActivity != null) {
+                val reviewInfo = task.result
+                val flow = reviewManager.launchReviewFlow(localActivity, reviewInfo)
+                flow.addOnSuccessListener {
+                    emitSignal("rate_success")
+                }
+                flow.addOnFailureListener {
+                    emitSignal("rate_failed", it.message)
+                }
+            } else {
+                // There was some problem, log or handle the error code.
+                val reviewErrorString = (task.exception as ReviewException).message
+                emitSignal("rate_failed", reviewErrorString)
             }
         }
     }
@@ -80,5 +94,12 @@ class GodotShare(godot: Godot) : GodotPlugin(godot) {
                 // Request the update.
             }
         }
+    }
+
+    override fun getPluginSignals(): Set<SignalInfo> {
+        val signals: MutableSet<SignalInfo> = ArraySet()
+        signals.add(SignalInfo("rate_success"))
+        signals.add(SignalInfo("rate_failed", String::class.java))
+        return signals
     }
 }
